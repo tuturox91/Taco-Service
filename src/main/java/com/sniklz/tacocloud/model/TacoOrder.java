@@ -1,5 +1,11 @@
 package com.sniklz.tacocloud.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Entity
 public class TacoOrder {
+
+    @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotBlank (message = "Delivery name is required")
     private String deliveryName;
@@ -28,7 +39,7 @@ public class TacoOrder {
     @NotBlank (message = "Zip code is required")
     private String deliveryZip;
 
-    @CreditCardNumber(message = "Not a valid credit card number")
+    //@CreditCardNumber(message = "Not a valid credit card number")
     private String ccNumber;
 
     @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
@@ -38,6 +49,7 @@ public class TacoOrder {
     @Digits(integer=3, fraction=0, message="Invalid CVV")
     private String ccCVV;
 
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco) {
